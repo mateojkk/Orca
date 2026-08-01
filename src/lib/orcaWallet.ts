@@ -83,7 +83,7 @@ export async function createFromPrivyWallet(
 
 export function buildPrivyAgentWallet(
   address: Address,
-  account: Account,
+  account: any,
   provider: unknown,
   username: string,
   pfp?: string
