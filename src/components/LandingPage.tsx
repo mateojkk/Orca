@@ -67,7 +67,6 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
   const [scrolled, setScrolled] = useState(false);
   const featuresRef = useRef<HTMLElement>(null);
   const howRef = useRef<HTMLElement>(null);
-  const archRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -103,7 +102,6 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
         <nav className={styles.nav}>
           <button className={styles.navItem} onClick={() => scrollTo(featuresRef)}>Features</button>
           <button className={styles.navItem} onClick={() => scrollTo(howRef)}>Process</button>
-          <button className={styles.navItem} onClick={() => scrollTo(archRef)}>Architecture</button>
         </nav>
         <button className={styles.launchBtn} onClick={onOpenAuth}>Launch Chat →</button>
       </header>
@@ -172,8 +170,8 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
       {/* ── PROCESS ── */}
       <section className={`${styles.section} ${styles.sectionDark}`} ref={howRef} id="how">
         <div className={styles.sectionInner}>
-          <div className={styles.sectionLabel}>// OPERATIONAL PROCESS</div>
-          <h2 className={styles.sectionTitle}>Execution Sequence</h2>
+          <div className={styles.sectionLabel}>// HOW IT WORKS</div>
+          <h2 className={styles.sectionTitle}>Get started in seconds</h2>
           <div className={styles.stepsRow}>
             {STEPS.map((s, i) => (
               <div key={s.n} className={styles.step}>
@@ -186,36 +184,8 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
           </div>
           <div className={styles.howCta}>
             <button className={styles.ctaPrimary} onClick={onOpenAuth}>
-              Begin Sequence
+              Create Account
             </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECURITY GUARANTEES ── */}
-      <section className={styles.section} ref={archRef} id="architecture">
-        <div className={styles.sectionInner}>
-          <div className={styles.sectionLabel}>// SECURITY</div>
-          <h2 className={styles.sectionTitle}>Built on cryptography</h2>
-          <p className={styles.sectionSub}>
-            ORCA runs inside secure hardware enclaves to ensure that nobody—not even the relayer—can access your funds.
-          </p>
-          <div className={styles.archGrid}>
-            <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Compute</div>
-              <div className={styles.archCardTitle}>Hardware Privacy</div>
-              <p className={styles.archCardBody}>Transactions are processed inside secure, isolated environments. Nobody—not even the host machine—can read your data.</p>
-            </div>
-            <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Storage</div>
-              <div className={styles.archCardTitle}>Encrypted State</div>
-              <p className={styles.archCardBody}>Balances and transfer amounts are cryptographically hidden on-chain. Only you know what you hold.</p>
-            </div>
-            <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Access</div>
-              <div className={styles.archCardTitle}>Non-Custodial</div>
-              <p className={styles.archCardBody}>Your account is secured by a distributed network. You retain full sovereign control over your assets at all times.</p>
-            </div>
           </div>
         </div>
       </section>
