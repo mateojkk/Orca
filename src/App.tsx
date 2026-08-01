@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { usePrivy } from '@privy-io/react-auth';
 import { useAppState } from './hooks/useAppState';
@@ -10,7 +11,7 @@ import { destroyWallet } from './lib/orcaWallet';
 
 export default function App() {
   const { authenticated, logout, ready } = usePrivy();
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const navigate = useNavigate();
   const {
     wallet,
     setWallet,
@@ -26,25 +27,26 @@ export default function App() {
   } = useAppState();
 
   const handleWallet = (w: OrcaWallet) => {
-    setShowAuthModal(false);
     setWallet(w);
+    navigate('/home');
   };
 
   const handleLogout = async () => {
     setWallet(null);
-    setShowAuthModal(false);
     if (authenticated) {
       await logout().catch(() => {});
     }
     destroyWallet();
     sessionStorage.removeItem('orca_lines');
+    navigate('/');
   };
 
   useEffect(() => {
-    if (ready && authenticated && !wallet) {
-      setShowAuthModal(true);
+    // If we're authenticated but don't have a wallet yet, redirect to login to connect/restore
+    if (ready && authenticated && !wallet && !restoring) {
+      navigate('/login');
     }
-  }, [ready, authenticated, wallet]);
+  }, [ready, authenticated, wallet, restoring, navigate]);
 
   return (
     <>
@@ -77,28 +79,33 @@ export default function App() {
         }}>
           ◈ ORCA
         </div>
-      ) : wallet ? (
-        <AppShell
-          wallet={wallet}
-          contacts={contacts}
-          balance={balance}
-          confidentialBalance={confidentialBalance}
-          balanceLoading={balanceLoading}
-          assets={assets}
-          onRefreshBalance={refreshBalance}
-          onAddContact={addContact}
-          onRemoveContact={removeContact}
-          onLock={handleLogout}
-          onWalletChange={setWallet}
-        />
-      ) : (authenticated || showAuthModal) ? (
-        <AuthView
-          onWallet={handleWallet}
-          onLogout={handleLogout}
-          onClose={() => setShowAuthModal(false)}
-        />
       ) : (
-        <LandingPage onOpenAuth={() => setShowAuthModal(true)} />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={wallet ? <Navigate to="/home" replace /> : <LandingPage onOpenAuth={() => navigate('/login')} />} />
+          <Route path="/login" element={wallet ? <Navigate to="/home" replace /> : <AuthView onWallet={handleWallet} onLogout={handleLogout} onClose={() => navigate('/')} />} />
+          
+          {/* Protected Routes inside AppShell */}
+          <Route path="/*" element={
+            wallet ? (
+              <AppShell
+                wallet={wallet}
+                contacts={contacts}
+                balance={balance}
+                confidentialBalance={confidentialBalance}
+                balanceLoading={balanceLoading}
+                assets={assets}
+                onRefreshBalance={refreshBalance}
+                onAddContact={addContact}
+                onRemoveContact={removeContact}
+                onLock={handleLogout}
+                onWalletChange={setWallet}
+              />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } />
+        </Routes>
       )}
     </>
   );

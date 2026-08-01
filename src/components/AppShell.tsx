@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import type { OrcaWallet } from '../lib/orcaWallet';
 import type { Contact } from '../lib/contacts';
 import type { AssetBalance } from '../hooks/useAppState';
@@ -8,9 +9,6 @@ import SettingsView from '../views/SettingsView';
 
 import Chat from './Chat';
 import styles from '../styles/appShell.module.css';
-
-type Tab = 'home' | 'contacts' | 'chat' | 'settings';
-const ACTIVE_TAB_KEY = 'orca_active_tab';
 
 interface AppShellProps {
   wallet: OrcaWallet;
@@ -39,19 +37,10 @@ export default function AppShell({
   onLock,
   onWalletChange,
 }: AppShellProps) {
-  const [activeTab, setActiveTab] = useState<Tab>(() => {
-    const saved = sessionStorage.getItem(ACTIVE_TAB_KEY);
-    if (saved === 'home' || saved === 'contacts' || saved === 'chat' || saved === 'settings') {
-      return saved;
-    }
-    return 'home';
-  });
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const shortAddr = `${wallet.address.slice(0, 6)}…${wallet.address.slice(-4)}`;
-
-  useEffect(() => {
-    sessionStorage.setItem(ACTIVE_TAB_KEY, activeTab);
-  }, [activeTab]);
 
   return (
     <div className={styles['app-shell']}>
@@ -62,7 +51,7 @@ export default function AppShell({
         </div>
         <div
           className={styles['app-user-badge']}
-          onClick={() => setActiveTab('settings')}
+          onClick={() => navigate('/settings')}
         >
           <span className={styles['user-dot']} />
           @{wallet.username} · {shortAddr}
@@ -71,33 +60,34 @@ export default function AppShell({
 
       {/* Content */}
       <main className={styles['app-content']}>
-        {activeTab === 'home' && (
-          <HomeView
-            wallet={wallet}
-            balance={balance}
-            confidentialBalance={confidentialBalance}
-            balanceLoading={balanceLoading}
-            assets={assets}
-            onRefresh={onRefreshBalance}
-          />
-        )}
-
-        {activeTab === 'contacts' && (
-          <ContactsView
-            contacts={contacts}
-            onAdd={onAddContact}
-            onRemove={onRemoveContact}
-          />
-        )}
-
-        {activeTab === 'chat' && (
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <Chat wallet={wallet} onWalletChange={onWalletChange} />
-          </div>
-        )}
-        {activeTab === 'settings' && (
-          <SettingsView wallet={wallet} onLock={onLock} onWalletChange={onWalletChange} />
-        )}
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={
+            <HomeView
+              wallet={wallet}
+              balance={balance}
+              confidentialBalance={confidentialBalance}
+              balanceLoading={balanceLoading}
+              assets={assets}
+              onRefresh={onRefreshBalance}
+            />
+          } />
+          <Route path="/contacts" element={
+            <ContactsView
+              contacts={contacts}
+              onAdd={onAddContact}
+              onRemove={onRemoveContact}
+            />
+          } />
+          <Route path="/chat" element={
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <Chat wallet={wallet} onWalletChange={onWalletChange} />
+            </div>
+          } />
+          <Route path="/settings" element={
+            <SettingsView wallet={wallet} onLock={onLock} onWalletChange={onWalletChange} />
+          } />
+        </Routes>
       </main>
 
       {/* Tab bar */}
@@ -105,8 +95,8 @@ export default function AppShell({
         <TabItem
           id="home"
           label="Home"
-          active={activeTab === 'home'}
-          onClick={() => setActiveTab('home')}
+          active={location.pathname === '/home'}
+          onClick={() => navigate('/home')}
           icon={
             <svg className={styles['tab-icon']} viewBox="0 0 24 24">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -117,8 +107,8 @@ export default function AppShell({
         <TabItem
           id="chat"
           label="Chat"
-          active={activeTab === 'chat'}
-          onClick={() => setActiveTab('chat')}
+          active={location.pathname === '/chat'}
+          onClick={() => navigate('/chat')}
           icon={
             <svg className={styles['tab-icon']} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="4 17 10 11 4 5" />
@@ -126,12 +116,11 @@ export default function AppShell({
             </svg>
           }
         />
-
         <TabItem
           id="contacts"
           label="Contacts"
-          active={activeTab === 'contacts'}
-          onClick={() => setActiveTab('contacts')}
+          active={location.pathname === '/contacts'}
+          onClick={() => navigate('/contacts')}
           icon={
             <svg className={styles['tab-icon']} viewBox="0 0 24 24">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />

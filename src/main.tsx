@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider } from 'wagmi';
@@ -13,6 +14,7 @@ const privyAppId = import.meta.env.VITE_PRIVY_APP_ID || 'clw12345678901234567890
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <BrowserRouter>
     <PrivyProvider
       appId={privyAppId}
       config={{
@@ -36,5 +38,6 @@ createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </WagmiProvider>
     </PrivyProvider>
+    </BrowserRouter>
   </StrictMode>
 );
