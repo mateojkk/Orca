@@ -81,34 +81,28 @@ export function useAppState() {
     refreshBalance();
   }, [refreshBalance]);
 
-  // Auto-convert public Sepolia USDC into private cUSDC.
-  useEffect(() => {
+  const sweepUSDC = useCallback(async () => {
     if (!wallet || !balance || isSweeping) return;
 
     const rawBalance = parseUnits(balance, 6);
     if (rawBalance > 0n) {
-      const convertToConfidential = async () => {
-        setIsSweeping(true);
-        try {
-          const allowance = await getUsdcAllowance(wallet.address);
-          if (allowance < rawBalance) {
-            console.log("Approving USDC for cUSDC conversion...");
-            const approveHash = await approveUSDC(wallet.walletClient, rawBalance);
-            await waitForTx(approveHash);
-          }
-          console.log("Converting USDC to cUSDC...");
-          const depositHash = await deposit(wallet.walletClient, rawBalance);
-          await waitForTx(depositHash);
-          await refreshBalance();
-        } catch (e) {
-          console.error("USDC to cUSDC conversion failed:", e);
-        } finally {
-          setIsSweeping(false);
+      setIsSweeping(true);
+      try {
+        const allowance = await getUsdcAllowance(wallet.address);
+        if (allowance < rawBalance) {
+          console.log("Approving USDC for cUSDC conversion...");
+          const approveHash = await approveUSDC(wallet.walletClient, rawBalance);
+          await waitForTx(approveHash);
         }
-      };
-      
-      const timeout = setTimeout(convertToConfidential, 1000);
-      return () => clearTimeout(timeout);
+        console.log("Converting USDC to cUSDC...");
+        const depositHash = await deposit(wallet.walletClient, rawBalance);
+        await waitForTx(depositHash);
+        await refreshBalance();
+      } catch (e) {
+        console.error("USDC to cUSDC conversion failed:", e);
+      } finally {
+        setIsSweeping(false);
+      }
     }
   }, [wallet, balance, isSweeping, refreshBalance]);
 
@@ -141,6 +135,7 @@ export function useAppState() {
     refreshContacts,
     addContact: addContactFn,
     removeContact: removeContactFn,
-    isSweeping, // expose if UI wants to show a spinner
+    sweepUSDC,
+    isSweeping,
   };
 }

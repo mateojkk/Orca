@@ -24,6 +24,8 @@ export default function App() {
     refreshBalance,
     addContact,
     removeContact,
+    sweepUSDC,
+    isSweeping,
   } = useAppState();
 
   const handleWallet = (w: OrcaWallet) => {
@@ -100,6 +102,8 @@ export default function App() {
                 onRemoveContact={removeContact}
                 onLock={handleLogout}
                 onWalletChange={setWallet}
+                sweepUSDC={sweepUSDC}
+                isSweeping={isSweeping}
               />
             ) : (
               <Navigate to="/login" replace />

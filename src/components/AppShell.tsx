@@ -22,6 +22,8 @@ interface AppShellProps {
   onRemoveContact: (name: string) => Promise<void>;
   onLock: () => void;
   onWalletChange: (wallet: OrcaWallet | null) => void;
+  sweepUSDC: () => Promise<void>;
+  isSweeping: boolean;
 }
 
 export default function AppShell({
@@ -36,6 +38,8 @@ export default function AppShell({
   onRemoveContact,
   onLock,
   onWalletChange,
+  sweepUSDC,
+  isSweeping,
 }: AppShellProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,6 +74,8 @@ export default function AppShell({
               balanceLoading={balanceLoading}
               assets={assets}
               onRefresh={onRefreshBalance}
+              onSweep={sweepUSDC}
+              isSweeping={isSweeping}
             />
           } />
           <Route path="/contacts" element={
@@ -125,6 +131,17 @@ export default function AppShell({
             <svg className={styles['tab-icon']} viewBox="0 0 24 24">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
+            </svg>
+          }
+        />
+        <TabItem
+          id="faucet"
+          label="Faucet"
+          active={false}
+          onClick={() => window.open('https://faucet.circle.com/', '_blank')}
+          icon={
+            <svg className={styles['tab-icon']} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           }
         />

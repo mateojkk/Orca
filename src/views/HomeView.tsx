@@ -12,6 +12,8 @@ interface HomeViewProps {
   balanceLoading: boolean;
   assets?: AssetBalance[]; // Kept for backwards compatibility just in case but optional
   onRefresh: () => void;
+  onSweep: () => Promise<void>;
+  isSweeping: boolean;
 }
 
 export default function HomeView({
@@ -21,6 +23,8 @@ export default function HomeView({
   balanceLoading,
   assets: _assets,
   onRefresh,
+  onSweep,
+  isSweeping,
 }: HomeViewProps) {
   const [balanceVisible, setBalanceVisible] = useState<boolean>(true);
 
@@ -50,7 +54,7 @@ export default function HomeView({
   let totalBalDisplay = '-';
   if (balanceVisible) {
     if (confidentialBalance) {
-      totalBalDisplay = `${confidentialBalance} cUSDC`;
+      totalBalDisplay = `$${confidentialBalance}`;
     }
   } else {
     totalBalDisplay = '******';
@@ -60,7 +64,7 @@ export default function HomeView({
     <div className={homeStyles['home-container']}>
       {/* Balance card */}
       <div className={homeStyles['balance-card']}>
-        <div className={homeStyles['balance-label']}>Private cUSDC Balance</div>
+        <div className={homeStyles['balance-label']}>Private Balance</div>
         <div className={homeStyles['balance-amount']}>
           {balanceLoading ? (
             <span style={{ color: 'var(--fg-muted)', fontSize: 24 }}>Loading…</span>
@@ -69,8 +73,26 @@ export default function HomeView({
           )}
         </div>
 
-        <div style={{ marginTop: '8px', fontSize: '13px', color: 'var(--fg-muted)' }}>
-          Pending public USDC conversion: {balanceVisible ? `${balance || '0.00'} USDC` : '******'}
+        <div style={{ marginTop: '8px', fontSize: '13px', color: 'var(--fg-muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>Pending public USDC: {balanceVisible ? `$${balance || '0.00'}` : '******'}</span>
+          {Number(balance) > 0 && (
+            <button 
+              onClick={onSweep} 
+              disabled={isSweeping}
+              style={{
+                background: 'var(--accent)',
+                color: '#000',
+                border: 'none',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                cursor: isSweeping ? 'wait' : 'pointer',
+                fontWeight: 600,
+                fontSize: '11px'
+              }}
+            >
+              {isSweeping ? 'Converting...' : 'Convert to Private'}
+            </button>
+          )}
         </div>
 
         <div className={homeStyles['balance-actions']}>
