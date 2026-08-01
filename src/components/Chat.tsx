@@ -68,14 +68,14 @@ function getStepHelper(step: NonNullable<Step>): string {
     case 'disconnect':
       return 'Type `yes` to confirm. This clears your wallet from this device.';
     case 'deposit':
-      return 'Enter the amount of USDC to lock into your confidential balance.';
+      return 'Enter the USDC amount to convert into private cUSDC.';
     case 'withdraw':
-      return 'Enter the amount of USDC to withdraw from your confidential balance.';
+      return 'Enter the cUSDC amount to unwrap back to public USDC.';
     case 'send':
       if (step.step === 'amount') {
-        return 'Enter the USDC amount to send confidentially.';
+        return 'Enter the cUSDC amount to send confidentially.';
       }
-      return `Sending ${(step as any).amount} USDC - enter recipient address.`;
+      return `Sending ${(step as any).amount} cUSDC - enter recipient address.`;
     default:
       return '';
   }

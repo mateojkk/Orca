@@ -28,9 +28,11 @@ dist-ssr
 .env.local
 
 # Python
-api/.venv/
-api/__pycache__/
-api/orca.db
+backend/.venv/
+backend/__pycache__/
+backend/orca.db
+__pycache__/
+*.pyc
 
 # Caches and artifacts
 cache/

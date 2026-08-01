@@ -49,8 +49,8 @@ export default function HomeView({
 
   let totalBalDisplay = '-';
   if (balanceVisible) {
-    if (balance) {
-      totalBalDisplay = `$${balance}`;
+    if (confidentialBalance) {
+      totalBalDisplay = `${confidentialBalance} cUSDC`;
     }
   } else {
     totalBalDisplay = '******';
@@ -60,7 +60,7 @@ export default function HomeView({
     <div className={homeStyles['home-container']}>
       {/* Balance card */}
       <div className={homeStyles['balance-card']}>
-        <div className={homeStyles['balance-label']}>Sepolia USDC Balance</div>
+        <div className={homeStyles['balance-label']}>Private cUSDC Balance</div>
         <div className={homeStyles['balance-amount']}>
           {balanceLoading ? (
             <span style={{ color: 'var(--fg-muted)', fontSize: 24 }}>Loading…</span>
@@ -70,7 +70,7 @@ export default function HomeView({
         </div>
 
         <div style={{ marginTop: '8px', fontSize: '13px', color: 'var(--fg-muted)' }}>
-          Confidential Balance: {balanceVisible ? `$${confidentialBalance || '0.00'}` : '******'}
+          Pending public USDC conversion: {balanceVisible ? `${balance || '0.00'} USDC` : '******'}
         </div>
 
         <div className={homeStyles['balance-actions']}>

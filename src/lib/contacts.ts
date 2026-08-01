@@ -32,7 +32,7 @@ export async function getContacts(ownerAddress?: string): Promise<Contact[]> {
   }
 
   try {
-    const resp = await authAxios(ownerAddress).get('/contacts');
+    const resp = await authAxios(ownerAddress).get('/api/contacts');
     if (Array.isArray(resp.data)) {
       return resp.data.map((c: any) => ({
         id: c.id,
@@ -59,7 +59,7 @@ export async function addContact(
 
   if (SYNC_CONTACTS && ownerAddress) {
     try {
-      const resp = await authAxios(ownerAddress).post('/contacts', {
+      const resp = await authAxios(ownerAddress).post('/api/contacts', {
         name: contact.name,
         walletAddress: address,
       });
@@ -85,7 +85,7 @@ export async function removeContact(name: string, ownerAddress?: string): Promis
 
   if (SYNC_CONTACTS && ownerAddress && removed?.id) {
     try {
-      await authAxios(ownerAddress).delete(`/contacts/${removed.id}`);
+      await authAxios(ownerAddress).delete(`/api/contacts/${removed.id}`);
     } catch {
       /* ignore API error */
     }

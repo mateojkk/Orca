@@ -166,7 +166,7 @@ export default function ContactsView({ contacts, onAdd, onRemove }: ContactsView
 
       {contacts.length === 0 ? (
         <div className={contactsStyles['empty-state']}>
-          <p>No contacts yet. Add one to send ETH by name.</p>
+          <p>No contacts yet. Add one to send cUSDC by name.</p>
         </div>
       ) : (
         <div className={contactsStyles['contact-list']}>

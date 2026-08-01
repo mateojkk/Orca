@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+web3>=7.0.0
+eth-account>=0.11.0
+supabase
+gotrue

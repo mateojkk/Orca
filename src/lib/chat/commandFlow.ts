@@ -34,7 +34,7 @@ export async function handleCommand({
   if (cmd.type === 'help') {
     push(
       { kind: 'separator' },
-      { kind: 'output', text: '  send <amount> to <address>  - confidential send to another wallet' },
+      { kind: 'output', text: '  send <amount> to <address>  - send private cUSDC' },
       { kind: 'output', text: '  cheque <amount>             - create an encrypted payment link' },
       { kind: 'output', text: '  claim <secret>              - claim a cheque using its secret' },
       { kind: 'output', text: '  clear                       - clear chat output' },
@@ -126,7 +126,7 @@ export async function handleCommand({
       push({ kind: 'info', text: 'recipient address:' });
       setStep({ flow: 'send', step: 'to', amount: cmd.amount });
     } else {
-      push({ kind: 'info', text: 'amount to send? (e.g. 0.005)' });
+      push({ kind: 'info', text: 'cUSDC amount to send? (e.g. 0.005)' });
       setStep({ flow: 'send', step: 'amount' });
     }
     return true;
@@ -140,7 +140,7 @@ export async function handleCommand({
     if (cmd.amount) {
       await executeWriteCheque(cmd.amount);
     } else {
-      push({ kind: 'info', text: 'how much USDC to write the cheque for? (e.g. 0.05)' });
+      push({ kind: 'info', text: 'how much cUSDC to write the cheque for? (e.g. 0.05)' });
       setStep({ flow: 'cheque', step: 'amount' });
     }
     return true;

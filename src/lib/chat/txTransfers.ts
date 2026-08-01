@@ -10,7 +10,9 @@ import { CONFIDENTIAL_TOKEN_ADDRESS, isUserInitialized } from '../orcaContract';
 import { EXPLORER_TX } from '../sepoliaChain';
 import { RelayResponseSchema } from '../schemas';
 
-const RELAYER_URL = import.meta.env.VITE_RELAYER_URL || 'http://localhost:8080';
+// In production (Vercel): '' → same-origin, Vercel routes /api/* to the serverless function.
+// In dev: '' → Vite proxy forwards /api → http://127.0.0.1:8080.
+const RELAYER_URL = import.meta.env.VITE_RELAYER_URL || '';
 
 export async function executeSendHandler(
   wallet: OrcaWallet | null,
@@ -33,7 +35,7 @@ export async function executeSendHandler(
     return false;
   }
   setBusy(true);
-  push({ kind: 'info', text: `encrypting ${amountUSDC} USDC for confidential send...` });
+  push({ kind: 'info', text: `encrypting ${amountUSDC} cUSDC for confidential send...` });
   try {
     const amountWei = parseUnits(amountUSDC, 6);
     const { handle, proof } = await encryptAmount(amountWei, wallet.walletClient, CONFIDENTIAL_TOKEN_ADDRESS);
@@ -43,7 +45,7 @@ export async function executeSendHandler(
     const endpoint = isOrcaUser ? '/api/relay/submit' : '/api/relay/withdraw';
     
     if (!isOrcaUser) {
-      push({ kind: 'info', text: `recipient is not an ORCA user, withdrawing directly to their wallet...` });
+      push({ kind: 'info', text: `recipient is not an ORCA user, unwrapping to public USDC for them...` });
     }
 
     const resp = await fetch(`${RELAYER_URL}${endpoint}`, {
@@ -100,7 +102,7 @@ export async function executeWriteChequeHandler(
     return false;
   }
   setBusy(true);
-  push({ kind: 'info', text: `encrypting ${amountUSDC} USDC for cheque...` });
+  push({ kind: 'info', text: `encrypting ${amountUSDC} cUSDC for cheque...` });
   try {
     const amountWei = parseUnits(amountUSDC, 6);
     const { handle, proof } = await encryptAmount(amountWei, wallet.walletClient, CONFIDENTIAL_TOKEN_ADDRESS);

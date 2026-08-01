@@ -11,7 +11,9 @@ export function isValidAddress(addr: string): boolean {
   return ETH_RE.test(addr);
 }
 
-const API_BASE_URL = import.meta.env.VITE_RELAYER_URL || import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// In production (Vercel): '' → same-origin, routes /api/* to the serverless function.
+// In dev: '' → Vite proxy in vite.config.ts forwards /api → http://127.0.0.1:8080.
+const API_BASE_URL = import.meta.env.VITE_RELAYER_URL || import.meta.env.VITE_API_URL || '';
 
 export function setAuthToken(token: string | null): void {
   if (token) {

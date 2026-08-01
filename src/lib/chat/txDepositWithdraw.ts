@@ -43,12 +43,12 @@ export async function executeDepositHandler(
       push({ kind: 'success', text: `✓ approval confirmed` });
     }
     
-    push({ kind: 'info', text: `depositing ${amountUSDC} USDC...` });
+    push({ kind: 'info', text: `converting ${amountUSDC} USDC to cUSDC...` });
     const hash = await deposit(wallet.walletClient, amountWei);
     push({ kind: 'info', text: 'waiting for confirmation...' });
     await waitForTx(hash);
     push(
-      { kind: 'success', text: `✓ deposited ${amountUSDC} USDC into confidential balance` },
+      { kind: 'success', text: `✓ minted ${amountUSDC} cUSDC` },
       { kind: 'link',    text: `  tx: ${hash.slice(0, 12)}...${hash.slice(-6)} ↗`, href: EXPLORER_TX(hash) },
       { kind: 'separator' },
     );
@@ -81,7 +81,7 @@ export async function executeWithdrawHandler(
     return false;
   }
   setBusy(true);
-  push({ kind: 'info', text: `encrypting ${amountUSDC} USDC for withdrawal...` });
+  push({ kind: 'info', text: `encrypting ${amountUSDC} cUSDC for withdrawal...` });
   try {
     const amountWei = parseUnits(amountUSDC, 6);
     const { handle, proof } = await encryptAmount(amountWei, wallet.walletClient, CONFIDENTIAL_TOKEN_ADDRESS);
@@ -90,7 +90,7 @@ export async function executeWithdrawHandler(
     push({ kind: 'info', text: 'waiting for confirmation...' });
     await waitForTx(hash);
     push(
-      { kind: 'success', text: `✓ withdrew ${amountUSDC} USDC to your address` },
+      { kind: 'success', text: `✓ unwrapped ${amountUSDC} cUSDC to public USDC` },
       { kind: 'link',    text: `  tx: ${hash.slice(0, 12)}...${hash.slice(-6)} ↗`, href: EXPLORER_TX(hash) },
       { kind: 'separator' },
     );

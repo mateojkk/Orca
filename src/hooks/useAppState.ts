@@ -6,7 +6,7 @@ import { formatUnits, parseUnits } from 'viem';
 import { getContacts, addContact, removeContact } from '../lib/contacts';
 import type { Contact } from '../lib/contacts';
 import type { OrcaWallet } from '../lib/orcaWallet';
-import { getUsdcBalance, getBalanceHandle, getUsdcAllowance, approveUSDC, deposit } from '../lib/orcaContract';
+import { getUsdcBalance, getBalanceHandle, getUsdcAllowance, approveUSDC, deposit, waitForTx } from '../lib/orcaContract';
 import { decryptBalance } from '../lib/noxSdk';
 
 export interface AssetBalance {
@@ -27,7 +27,7 @@ export function useAppState() {
   const [assets, setAssets] = useState<AssetBalance[]>([]);
   const [restoring] = useState(false);
   
-  // Track if we are currently sweeping
+  // Any public USDC sent to an ORCA address is automatically wrapped into cUSDC.
   const [isSweeping, setIsSweeping] = useState(false);
 
   useEffect(() => {
@@ -81,36 +81,33 @@ export function useAppState() {
     refreshBalance();
   }, [refreshBalance]);
 
-  // Auto-Sweeper logic
+  // Auto-convert public Sepolia USDC into private cUSDC.
   useEffect(() => {
     if (!wallet || !balance || isSweeping) return;
 
     const rawBalance = parseUnits(balance, 6);
     if (rawBalance > 0n) {
-      // We have public USDC, sweep it!
-      const sweep = async () => {
+      const convertToConfidential = async () => {
         setIsSweeping(true);
         try {
-          // Check allowance
           const allowance = await getUsdcAllowance(wallet.address);
           if (allowance < rawBalance) {
-            console.log("Approving USDC for sweep...");
-            await approveUSDC(wallet.walletClient, rawBalance);
-            // wait for a bit to ensure the tx is mined if not using waitForTx
+            console.log("Approving USDC for cUSDC conversion...");
+            const approveHash = await approveUSDC(wallet.walletClient, rawBalance);
+            await waitForTx(approveHash);
           }
-          console.log("Depositing USDC to confidential balance...");
-          await deposit(wallet.walletClient, rawBalance);
-          // Refresh balances after deposit
-          setTimeout(refreshBalance, 3000);
+          console.log("Converting USDC to cUSDC...");
+          const depositHash = await deposit(wallet.walletClient, rawBalance);
+          await waitForTx(depositHash);
+          await refreshBalance();
         } catch (e) {
-          console.error("Auto-sweep failed:", e);
+          console.error("USDC to cUSDC conversion failed:", e);
         } finally {
           setIsSweeping(false);
         }
       };
       
-      // Add a small delay so UI can load first
-      const timeout = setTimeout(sweep, 1000);
+      const timeout = setTimeout(convertToConfidential, 1000);
       return () => clearTimeout(timeout);
     }
   }, [wallet, balance, isSweeping, refreshBalance]);

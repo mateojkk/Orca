@@ -91,7 +91,7 @@ export default function App() {
           onLock={handleLogout}
           onWalletChange={setWallet}
         />
-      ) : showAuthModal ? (
+      ) : (authenticated || showAuthModal) ? (
         <AuthView
           onWallet={handleWallet}
           onLogout={handleLogout}

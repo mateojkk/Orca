@@ -23,6 +23,10 @@ createRoot(document.getElementById('root')!).render(
           ethereum: {
             createOnLogin: 'users-without-wallets',
           },
+          // Suppress Privy's signing confirmation modal globally.
+          // The MPC security model is unchanged (keys never exposed) — this only
+          // hides the UI prompt so Nox SDK encryptInput() calls sign silently.
+          showWalletUIs: false,
         },
       }}
     >
