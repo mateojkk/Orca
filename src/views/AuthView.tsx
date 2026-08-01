@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { toViemAccount, useCreateWallet, useLoginWithEmail, usePrivy, useWallets } from '@privy-io/react-auth';
+import { useCreateWallet, useLoginWithEmail, usePrivy, useWallets } from '@privy-io/react-auth';
 import type { Address } from 'viem';
 import type { OrcaWallet } from '../lib/orcaWallet';
 import { buildPrivyAgentWallet } from '../lib/orcaWallet';
@@ -104,7 +104,6 @@ export default function AuthView({ onWallet, onClose }: AuthViewProps) {
               await wallet.switchChain(sepolia.id).catch(() => {});
             }
             const provider = await wallet.getEthereumProvider();
-            const account = await toViemAccount({ wallet });
 
             if (pendingSignup.requestedUsername) {
               localStorage.setItem(`orca_user_${wallet.address}`, pendingSignup.requestedUsername);
@@ -112,7 +111,7 @@ export default function AuthView({ onWallet, onClose }: AuthViewProps) {
 
             const restored = buildPrivyAgentWallet(
               wallet.address as Address,
-              account as any,
+              wallet.address as Address,
               provider,
               pendingSignup.requestedUsername || (email ? email.split('@')[0] : wallet.address.slice(0, 8))
             );
