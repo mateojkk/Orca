@@ -5,16 +5,18 @@ import { useChatController } from '../lib/chat/useChatController';
 import { stepMasksInput } from '../lib/chat/stepFlow';
 import type { Step } from '../lib/chat/types';
 import type { OrcaWallet } from '../lib/orcaWallet';
+import type { Contact } from '../lib/contacts';
 import styles from '../styles/chatShell.module.css';
 
 interface ChatProps {
   wallet?: OrcaWallet | null;
   onWalletChange?: (wallet: OrcaWallet | null) => void;
+  contacts?: Contact[];
 }
 
-export default function Chat({ wallet: initialWallet }: ChatProps) {
+export default function Chat({ wallet: initialWallet, contacts = [] }: ChatProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { lines, cmdHistory, busy, step, handleSubmit } = useChatController(initialWallet);
+  const { lines, cmdHistory, busy, step, handleSubmit } = useChatController(initialWallet, contacts);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

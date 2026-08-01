@@ -9,6 +9,7 @@ import { handleCommand } from './commandFlow';
 import { handleStepInput, stepMasksInput } from './stepFlow';
 import type { Step } from './types';
 import type { OrcaWallet } from '../orcaWallet';
+import type { Contact } from '../contacts';
 import { walletExists } from '../orcaWallet';
 import {
   executeDepositHandler,
@@ -22,7 +23,7 @@ import {
 
 const SESSION_KEY = 'orca_lines';
 
-export function useChatController(initialWallet?: OrcaWallet | null) {
+export function useChatController(initialWallet?: OrcaWallet | null, contacts: Contact[] = []) {
   const [lines, setLines]           = useState<OutputLine[]>(BOOT_LINES);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [busy, setBusy]             = useState(false);
@@ -74,8 +75,15 @@ export function useChatController(initialWallet?: OrcaWallet | null) {
   }, [wallet, push]);
 
   const executeSend = useCallback(async (amountUSDC: string, to: string): Promise<boolean> => {
-    return executeSendHandler(wallet, amountUSDC, to, push, setBusy);
-  }, [wallet, push]);
+    let resolvedTo = to;
+    if (!to.startsWith('0x')) {
+      const match = contacts.find(c => c.name.toLowerCase() === to.toLowerCase());
+      if (match) {
+        resolvedTo = match.address;
+      }
+    }
+    return executeSendHandler(wallet, amountUSDC, resolvedTo, push, setBusy);
+  }, [wallet, push, contacts]);
 
   const executeWriteCheque = useCallback(async (amountUSDC: string): Promise<boolean> => {
     return executeWriteChequeHandler(wallet, amountUSDC, push, setBusy);

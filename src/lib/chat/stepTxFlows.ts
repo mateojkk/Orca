@@ -1,7 +1,6 @@
 /**
  * stepTxFlows.ts - deposit, withdraw, send, cheque, and claim multi-step handlers
  */
-import { isAddress } from 'viem';
 import type { OutputLine } from '../../components/ChatOutput';
 import type { Step } from './types';
 
@@ -57,10 +56,6 @@ export async function handleTxSteps({
     }
     if (step.step === 'to') {
       setStep(null);
-      if (!isAddress(val)) {
-        push({ kind: 'error', text: `invalid address: ${val}` });
-        return true;
-      }
       await executeSend(step.amount, val);
       return true;
     }

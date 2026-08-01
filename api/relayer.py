@@ -113,7 +113,7 @@ def submit_relayed_transfer(
     proof_bytes  = bytes.fromhex(proof.removeprefix("0x"))
 
     with nonce_lock:
-        nonce     = w3.eth.get_transaction_count(relayer_account.address)
+        nonce     = w3.eth.get_transaction_count(relayer_account.address, "pending")
         gas_price = w3.eth.gas_price
 
         txn = contract.functions.relayedTransfer(
@@ -155,7 +155,7 @@ def submit_relayed_withdraw(
     proof_bytes  = bytes.fromhex(proof.removeprefix("0x"))
 
     with nonce_lock:
-        nonce     = w3.eth.get_transaction_count(relayer_account.address)
+        nonce     = w3.eth.get_transaction_count(relayer_account.address, "pending")
         gas_price = w3.eth.gas_price
 
         txn = contract.functions.relayedWithdrawUSDC(
@@ -197,7 +197,7 @@ def submit_write_cheque(
     proof_bytes  = bytes.fromhex(proof.removeprefix("0x"))
 
     with nonce_lock:
-        nonce     = w3.eth.get_transaction_count(relayer_account.address)
+        nonce     = w3.eth.get_transaction_count(relayer_account.address, "pending")
         gas_price = w3.eth.gas_price
 
         txn = contract.functions.relayedWriteCheque(
@@ -239,7 +239,7 @@ def submit_claim_cheque(
         v += 27
 
     with nonce_lock:
-        nonce     = w3.eth.get_transaction_count(relayer_account.address)
+        nonce     = w3.eth.get_transaction_count(relayer_account.address, "pending")
         gas_price = w3.eth.gas_price
 
         txn = contract.functions.relayedClaimCheque(
@@ -277,7 +277,7 @@ def fund_user_if_needed(user_address: str) -> str:
     amount_to_send = target_balance - balance
     
     with nonce_lock:
-        nonce = w3.eth.get_transaction_count(relayer_account.address)
+        nonce = w3.eth.get_transaction_count(relayer_account.address, "pending")
         gas_price = w3.eth.gas_price
         
         txn = {
