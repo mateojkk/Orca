@@ -190,28 +190,11 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ── */}
-      <section className={styles.ctaSection}>
-        <div className={styles.sectionInner}>
-          <h2 className={styles.ctaSectionTitle}>Establish Connection</h2>
-          <p className={styles.ctaSectionSub}>Access the confidential execution environment.</p>
-          <button className={styles.ctaPrimaryLg} onClick={onOpenAuth}>
-            Launch Chat
-          </button>
-        </div>
-      </section>
 
       {/* ── FOOTER ── */}
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
-          <span className={styles.footerBrand}>ORCA</span>
-          <span className={styles.footerSep}>·</span>
-          <span>Confidential State on Ethereum</span>
-        </div>
-        <div className={styles.footerMid}>
-          <span>PRIVATE</span>
-          <span>SECURE</span>
-          <span>FAST</span>
+          <span className={styles.footerBrand}>ORCA @ 2026</span>
         </div>
         <div className={styles.footerTime}>{timeStr || '00:00:00'} [UTC]</div>
       </footer>
