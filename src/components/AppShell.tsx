@@ -87,7 +87,7 @@ export default function AppShell({
           } />
           <Route path="/chat" element={
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <Chat wallet={wallet} onWalletChange={onWalletChange} />
+              <Chat wallet={wallet} contacts={contacts} />
             </div>
           } />
           <Route path="/settings" element={
