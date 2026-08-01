@@ -98,7 +98,7 @@
 .suggestion {
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--accent);
+  color: #ffffff;
   background: rgba(0, 255, 102, 0.1);
   border: 1px solid rgba(0,220,180,0.2);
   border-radius: 6px;

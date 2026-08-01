@@ -28,6 +28,8 @@ from database import (
     delete_contact,
     get_user_preferences,
     update_user_preferences,
+    get_transactions,
+    insert_transaction,
 )
 
 app = FastAPI(title="ORCA Relayer & API", version="1.0.0")
@@ -133,6 +135,11 @@ def api_update_preferences(body: UserPreferencesRequest, owner: Annotated[str, D
     return update_user_preferences(owner, body.balance_visible)
 
 
+@app.get("/api/transactions")
+def api_get_transactions(owner: Annotated[str, Depends(require_wallet_owner)]):
+    return get_transactions(owner)
+
+
 @app.get("/contacts")
 def api_get_contacts(owner: Annotated[str, Depends(require_wallet_owner)]):
     return get_contacts(owner)
@@ -166,6 +173,7 @@ async def relay_submit(body: RelayRequest, web3: Web3Dep):
         tx_hash = await loop.run_in_executor(
             None, submit_relayed_transfer, body.from_addr, body.to, body.handle, body.proof
         )
+        insert_transaction(tx_hash, body.from_addr, body.to, "transfer", body.handle)
         return {"txHash": tx_hash, "status": "submitted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"relay failed: {str(e)}")
@@ -187,6 +195,7 @@ async def relay_withdraw(body: RelayWithdrawRequest, web3: Web3Dep):
         tx_hash = await loop.run_in_executor(
             None, submit_relayed_withdraw, body.from_addr, body.to, body.handle, body.proof, amount
         )
+        insert_transaction(tx_hash, body.from_addr, body.to, "withdraw", body.handle)
         return {"txHash": tx_hash, "status": "submitted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"relay failed: {str(e)}")
@@ -201,6 +210,7 @@ async def relay_cheque_write(body: ChequeWriteRequest, web3: Web3Dep):
         tx_hash = await loop.run_in_executor(
             None, submit_write_cheque, body.from_addr, body.chequeId, body.handle, body.proof
         )
+        insert_transaction(tx_hash, body.from_addr, body.chequeId, "cheque_write", body.handle)
         return {"txHash": tx_hash, "status": "submitted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"relay failed: {str(e)}")
@@ -215,6 +225,7 @@ async def relay_cheque_claim(body: ChequeClaimRequest, web3: Web3Dep):
         tx_hash = await loop.run_in_executor(
             None, submit_claim_cheque, body.to, body.signature
         )
+        insert_transaction(tx_hash, "claim", body.to, "cheque_claim")
         return {"txHash": tx_hash, "status": "submitted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"relay failed: {str(e)}")

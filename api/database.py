@@ -88,3 +88,22 @@ def update_user_preferences(address: str, balance_visible: bool) -> Dict[str, An
         on_conflict="address"
     ).execute()
     return res.data[0] if res.data else {}
+
+# Transactions
+
+def get_transactions(address: str) -> List[Dict[str, Any]]:
+    if not supabase: return []
+    # Fetch transactions where the user is either the sender or the recipient
+    res = supabase.table("transactions").select("*").or_(f"from_address.ilike.{address},to_address.ilike.{address}").order("created_at", desc=True).execute()
+    return res.data
+
+def insert_transaction(tx_hash: str, from_address: str, to_address: str, type: str, handle: str = None) -> None:
+    if not supabase: return
+    supabase.table("transactions").insert({
+        "tx_hash": tx_hash,
+        "from_address": from_address,
+        "to_address": to_address,
+        "type": type,
+        "handle": handle,
+        "status": "confirmed"
+    }).execute()
