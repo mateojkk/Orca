@@ -8,57 +8,57 @@ interface LandingPageProps {
 const FEATURES = [
   {
     icon: '⬡',
-    tag: 'ENCRYPTION',
-    title: 'Zero-Knowledge Balances',
-    body: 'Your balance and transaction amounts are hidden behind ZK proofs inside a Trusted Execution Environment. Nobody on-chain sees what you hold or send — not even the relayer.',
+    tag: 'PRIVACY',
+    title: 'Complete Anonymity',
+    body: 'Your balance and transfer amounts are completely hidden. Nobody on the internet can see what you hold or where you send it.',
   },
   {
     icon: '◈',
-    tag: 'GASLESS',
-    title: 'Relayer-Paid Transactions',
-    body: "ORCA's backend relayer covers every gas fee. Sign once with your embedded wallet and the transaction is broadcast silently — no ETH required, no MetaMask pop-ups.",
+    tag: 'FREE',
+    title: 'Zero Gas Fees',
+    body: "We cover all the network fees for you. You'll never need to worry about holding extra ETH just to make a simple transfer.",
   },
   {
     icon: '⌘',
-    tag: 'UX',
-    title: 'Chat-Native Interface',
-    body: 'Send, receive, deposit and withdraw through plain English commands. Type "send 50 to alice" and it\'s done. No forms, no confirmations, no friction.',
+    tag: 'EASY',
+    title: 'Talk to Transact',
+    body: 'Send and receive money using plain English. Just type "send 50 to Alice" and it\'s done. No complicated forms or pop-ups.',
   },
   {
     icon: '⊕',
-    tag: 'CUSTODY',
-    title: 'Self-Sovereign Wallets',
-    body: 'Login with just your email. Privy creates an MPC embedded wallet you fully control. No seed phrases to store, no browser extension to install.',
+    tag: 'ACCESS',
+    title: 'Simple Login',
+    body: 'Sign in securely with just your email. There are no complicated seed phrases to write down and no browser extensions to install.',
   },
   {
     icon: '⬡',
-    tag: 'PROTOCOL',
-    title: 'Private Cheques',
-    body: 'Issue a bearer cheque to any address. The recipient claims it on-chain — amounts stay encrypted throughout. Works like cash, settles like crypto.',
+    tag: 'PAYMENTS',
+    title: 'Digital Cash',
+    body: 'Create a digital cheque and send the link to anyone. It works just like cash, but settles instantly over the internet.',
   },
   {
     icon: '◈',
-    tag: 'NETWORK',
-    title: 'iExec TEE Protocol',
-    body: 'Built on the iExec Nox protocol and ERC-7984. Confidential state is enforced at the protocol level via hardware-attested Trusted Execution Environments.',
+    tag: 'SECURITY',
+    title: 'Bank-Grade Security',
+    body: 'Built on enterprise-grade hardware security. Your funds are protected by the same secure technology used by major financial institutions.',
   },
 ];
 
 const STEPS = [
   {
     n: '01',
-    title: 'Initialization',
-    body: 'Authenticate to provision a distributed MPC wallet. The system generates key material without requiring external extensions.',
+    title: 'Connect',
+    body: 'Sign in securely with just an email. No seed phrases or browser extensions required.',
   },
   {
     n: '02',
-    title: 'State Transition',
-    body: 'Deposit assets into the confidential contract. The protocol encrypts the value, removing it from the public ledger view.',
+    title: 'Deposit',
+    body: 'Fund your account. Your public USDC is instantly wrapped into a private, encrypted balance.',
   },
   {
     n: '03',
-    title: 'Execution',
-    body: 'Issue instructions via the interface. The relayer structures, signs, and broadcasts the operation for immediate settlement.',
+    title: 'Transact',
+    body: 'Send, receive, and withdraw using natural language commands. The relayer handles the rest silently.',
   },
 ];
 
@@ -105,7 +105,7 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
           <button className={styles.navItem} onClick={() => scrollTo(howRef)}>Process</button>
           <button className={styles.navItem} onClick={() => scrollTo(archRef)}>Architecture</button>
         </nav>
-        <button className={styles.launchBtn} onClick={onOpenAuth}>Initialize Interface →</button>
+        <button className={styles.launchBtn} onClick={onOpenAuth}>Launch Chat →</button>
       </header>
 
       {/* ── HERO ── */}
@@ -113,38 +113,36 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
         <img src="/landing-hero.jpg" alt="" className={styles.heroBg} aria-hidden="true" />
         <div className={styles.heroOverlay} />
         <div className={styles.heroContent}>
-          <div className={styles.heroPill}>SEPOLIA TESTNET · V1.0</div>
           <h1 className={styles.heroHeadline}>
-            Confidential<br />
-            <span className={styles.heroAccent}>State Execution.</span>
+            The Confidential<br />
+            <span className={styles.heroAccent}>Chat Wallet.</span>
           </h1>
           <p className={styles.heroSub}>
-            We develop and execute confidential transactions and private state for Ethereum Sepolia.
-            From early encryption to final TEE delivery, we keep the process controlled - clear intent,{' '}
-            <em>precise</em> decisions, and a focus on what is essential.
+            Send, receive, and manage your assets through secure natural language commands.
+            All transactions are hardware-encrypted and completely hidden from the public ledger.
           </p>
           <div className={styles.heroCtas}>
             <button className={styles.ctaPrimary} onClick={onOpenAuth}>
-              Initialize Interface
+              Launch Chat
             </button>
             <button className={styles.ctaSecondary} onClick={() => scrollTo(featuresRef)}>
-              Review Specifications ↓
+              Learn More ↓
             </button>
           </div>
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatVal}>ZK-TEE</span>
-              <span className={styles.heroStatLabel}>Hardware Privacy</span>
+              <span className={styles.heroStatVal}>$0</span>
+              <span className={styles.heroStatLabel}>Gas Fees</span>
             </div>
             <div className={styles.heroStatDiv} />
             <div className={styles.heroStat}>
-              <span className={styles.heroStatVal}>7984</span>
-              <span className={styles.heroStatLabel}>ERC Standard</span>
+              <span className={styles.heroStatVal}>100%</span>
+              <span className={styles.heroStatLabel}>Private Balances</span>
             </div>
             <div className={styles.heroStatDiv} />
             <div className={styles.heroStat}>
-              <span className={styles.heroStatVal}>MPC</span>
-              <span className={styles.heroStatLabel}>Key Infrastructure</span>
+              <span className={styles.heroStatVal}>Zero</span>
+              <span className={styles.heroStatLabel}>Wallet Setup</span>
             </div>
           </div>
         </div>
@@ -153,10 +151,10 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
       {/* ── FEATURES ── */}
       <section className={styles.section} ref={featuresRef} id="features">
         <div className={styles.sectionInner}>
-          <div className={styles.sectionLabel}>// SYSTEM SPECIFICATIONS</div>
-          <h2 className={styles.sectionTitle}>Technical Implementation</h2>
+          <div className={styles.sectionLabel}>// CORE FEATURES</div>
+          <h2 className={styles.sectionTitle}>Everything you need, none of the complexity.</h2>
           <p className={styles.sectionSub}>
-            ORCA is structured to enforce data minimisation and execution privacy at the protocol level.
+            ORCA is designed to be the easiest, most private way to manage your digital assets.
           </p>
           <div className={styles.featureGrid}>
             {FEATURES.map((f) => (
@@ -194,35 +192,30 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ── ARCHITECTURE ── */}
+      {/* ── SECURITY GUARANTEES ── */}
       <section className={styles.section} ref={archRef} id="architecture">
         <div className={styles.sectionInner}>
-          <div className={styles.sectionLabel}>// ARCHITECTURE</div>
-          <h2 className={styles.sectionTitle}>Protocol Stack</h2>
+          <div className={styles.sectionLabel}>// SECURITY</div>
+          <h2 className={styles.sectionTitle}>Built on cryptography</h2>
           <p className={styles.sectionSub}>
-            The system relies on open, auditable cryptographic protocols. Privacy is enforced programmatically by the infrastructure, ensuring a trustless execution environment.
+            ORCA runs inside secure hardware enclaves to ensure that nobody—not even the relayer—can access your funds.
           </p>
           <div className={styles.archGrid}>
             <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Compute Layer</div>
-              <div className={styles.archCardTitle}>iExec TEE</div>
-              <p className={styles.archCardBody}>Intel SGX hardware-attested Trusted Execution Environments process and encrypt your state. The host machine cannot read the underlying data during execution.</p>
+              <div className={styles.archCardLabel}>Compute</div>
+              <div className={styles.archCardTitle}>Hardware Privacy</div>
+              <p className={styles.archCardBody}>Transactions are processed inside secure, isolated environments. Nobody—not even the host machine—can read your data.</p>
             </div>
             <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Token Layer</div>
-              <div className={styles.archCardTitle}>ERC-7984 / Nox</div>
-              <p className={styles.archCardBody}>A confidential ERC-20 extension where balances are ZK-encrypted on-chain. Transfer amounts are validated via zero-knowledge proofs without exposing their values.</p>
+              <div className={styles.archCardLabel}>Storage</div>
+              <div className={styles.archCardTitle}>Encrypted State</div>
+              <p className={styles.archCardBody}>Balances and transfer amounts are cryptographically hidden on-chain. Only you know what you hold.</p>
             </div>
             <div className={styles.archCard}>
-              <div className={styles.archCardLabel}>Key Management</div>
-              <div className={styles.archCardTitle}>Privy MPC</div>
-              <p className={styles.archCardBody}>Cryptographic keys are fragmented across a Multi-Party Computation network. The architecture facilitates seamless authentication while maintaining non-custodial guarantees.</p>
+              <div className={styles.archCardLabel}>Access</div>
+              <div className={styles.archCardTitle}>Non-Custodial</div>
+              <p className={styles.archCardBody}>Your account is secured by a distributed network. You retain full sovereign control over your assets at all times.</p>
             </div>
-          </div>
-          <div className={styles.archTags}>
-            {['Sepolia Testnet', 'iExec Nox Protocol', 'ERC-7984', 'Privy MPC', 'Viem / Wagmi', 'FastAPI Relayer'].map(t => (
-              <span key={t} className={styles.archTag}>{t}</span>
-            ))}
           </div>
         </div>
       </section>
@@ -233,7 +226,7 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
           <h2 className={styles.ctaSectionTitle}>Establish Connection</h2>
           <p className={styles.ctaSectionSub}>Access the confidential execution environment.</p>
           <button className={styles.ctaPrimaryLg} onClick={onOpenAuth}>
-            Initialize Interface
+            Launch Chat
           </button>
         </div>
       </section>
@@ -246,9 +239,9 @@ export default function LandingPage({ onOpenAuth }: LandingPageProps) {
           <span>Confidential State on Ethereum</span>
         </div>
         <div className={styles.footerMid}>
-          <span>SEPOLIA</span>
-          <span>iEXEC TEE</span>
-          <span>ERC-7984</span>
+          <span>PRIVATE</span>
+          <span>SECURE</span>
+          <span>FAST</span>
         </div>
         <div className={styles.footerTime}>{timeStr || '00:00:00'} [UTC]</div>
       </footer>
