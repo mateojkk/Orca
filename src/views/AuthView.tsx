@@ -93,6 +93,11 @@ export default function AuthView({ onWallet, onClose }: AuthViewProps) {
           try {
             let wallet: any = wallets.find((w: any) => w.walletClientType === 'privy') || wallets[0];
             if (!wallet) {
+              const hasEmbedded = user?.linkedAccounts?.some((acc: any) => acc.type === 'wallet' && (acc.walletClientType === 'privy' || acc.connectorType === 'embedded'));
+              if (hasEmbedded) {
+                // If they have one but it's not in the wallets array yet, just throw so we retry or wait for re-render
+                throw new Error('Syncing wallet... Please wait.');
+              }
               wallet = await createWallet();
             }
 
