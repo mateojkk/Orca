@@ -12,12 +12,12 @@ import sys
 import os
 
 _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-_backend = os.path.join(_root, "backend")
+_api = os.path.join(_root, "api")
 
 # Insert both so absolute and package-relative imports both work
-sys.path.insert(0, _backend)   # backend/ → allows: from relayer import ...
-sys.path.insert(0, _root)      # project root → allows: from backend.main import app
+sys.path.insert(0, _api)       # api/ → allows: from relayer import ...
+sys.path.insert(0, _root)      # project root → allows: from api.main import app
 
-from main import app  # main.py is in backend/, which is now first in sys.path
+from main import app  # main.py is in api/, which is now first in sys.path
 
 __all__ = ["app"]
