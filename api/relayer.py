@@ -131,7 +131,7 @@ def submit_relayed_transfer(
 
         signed   = relayer_account.sign_transaction(txn)
         tx_hash  = w3.eth.send_raw_transaction(signed.raw_transaction)
-        return tx_hash.hex()
+        return "0x" + tx_hash.hex()
 
 
 def submit_relayed_withdraw(
@@ -174,7 +174,7 @@ def submit_relayed_withdraw(
 
         signed   = relayer_account.sign_transaction(txn)
         tx_hash  = w3.eth.send_raw_transaction(signed.raw_transaction)
-        return tx_hash.hex()
+        return "0x" + tx_hash.hex()
 
 
 def submit_write_cheque(
@@ -215,7 +215,7 @@ def submit_write_cheque(
 
         signed   = relayer_account.sign_transaction(txn)
         tx_hash  = w3.eth.send_raw_transaction(signed.raw_transaction)
-        return tx_hash.hex()
+        return "0x" + tx_hash.hex()
 
 
 def submit_claim_cheque(
@@ -257,7 +257,7 @@ def submit_claim_cheque(
 
         signed   = relayer_account.sign_transaction(txn)
         tx_hash  = w3.eth.send_raw_transaction(signed.raw_transaction)
-        return tx_hash.hex()
+        return "0x" + tx_hash.hex()
 
 
 def fund_user_if_needed(user_address: str) -> str:
@@ -300,7 +300,7 @@ def fund_user_if_needed(user_address: str) -> str:
         except Exception:
             pass # Return tx hash anyway if it timeouts, they might retry.
             
-        return tx_hash.hex()
+        return "0x" + tx_hash.hex()
 
 
 def get_tx_status(tx_hash: str) -> dict:
