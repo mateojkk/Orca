@@ -260,6 +260,49 @@ def submit_claim_cheque(
         return tx_hash.hex()
 
 
+def fund_user_if_needed(user_address: str) -> str:
+    if not relayer_account:
+        raise ValueError("Relayer private key not configured")
+        
+    checksum_addr = Web3.to_checksum_address(user_address)
+    balance = w3.eth.get_balance(checksum_addr)
+    
+    # If they have at least 0.003 ETH, it's enough for gas
+    min_balance = w3.to_wei(0.003, 'ether')
+    target_balance = w3.to_wei(0.008, 'ether')
+    
+    if balance >= min_balance:
+        return "sufficient_balance"
+        
+    amount_to_send = target_balance - balance
+    
+    with nonce_lock:
+        nonce = w3.eth.get_transaction_count(relayer_account.address)
+        gas_price = w3.eth.gas_price
+        
+        txn = {
+            "chainId": 11155111,
+            "from": relayer_account.address,
+            "to": checksum_addr,
+            "value": amount_to_send,
+            "nonce": nonce,
+            "gas": 21000,
+            "gasPrice": gas_price
+        }
+        signed = relayer_account.sign_transaction(txn)
+        tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
+        
+        # We don't necessarily want to block the thread forever, but waiting for receipt 
+        # ensures they actually have the gas before they try to do a transaction on the frontend.
+        # We wait up to 120 seconds.
+        try:
+            w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+        except Exception:
+            pass # Return tx hash anyway if it timeouts, they might retry.
+            
+        return tx_hash.hex()
+
+
 def get_tx_status(tx_hash: str) -> dict:
     """Check if a transaction has been mined."""
     try:

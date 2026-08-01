@@ -16,6 +16,7 @@ from relayer import (
     submit_write_cheque,
     submit_claim_cheque,
     get_tx_status,
+    fund_user_if_needed,
     w3,
 )
 from database import (
@@ -79,6 +80,9 @@ class ChequeWriteRequest(BaseModel):
 class ChequeClaimRequest(BaseModel):
     to: str
     signature: str
+
+class FundRequest(BaseModel):
+    address: str
 
 
 class UserRegisterRequest(BaseModel):
@@ -214,6 +218,20 @@ async def relay_cheque_claim(body: ChequeClaimRequest, web3: Web3Dep):
         return {"txHash": tx_hash, "status": "submitted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"relay failed: {str(e)}")
+
+
+@app.post("/api/relay/fund")
+async def relay_fund(body: FundRequest, web3: Web3Dep):
+    if not web3.is_address(body.address):
+        raise HTTPException(status_code=400, detail="Invalid address")
+    try:
+        loop = asyncio.get_running_loop()
+        res = await loop.run_in_executor(
+            None, fund_user_if_needed, body.address
+        )
+        return {"status": "success", "result": res}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"relay fund failed: {str(e)}")
 
 
 @app.get("/api/relay/status/{tx_hash}")

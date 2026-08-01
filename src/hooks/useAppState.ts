@@ -7,6 +7,7 @@ import { getContacts, addContact, removeContact } from '../lib/contacts';
 import type { Contact } from '../lib/contacts';
 import type { OrcaWallet } from '../lib/orcaWallet';
 import { getUsdcBalance, getBalanceHandle, getUsdcAllowance, approveUSDC, deposit, waitForTx } from '../lib/orcaContract';
+import { baseApi } from '../api';
 import { decryptBalance } from '../lib/noxSdk';
 
 export interface AssetBalance {
@@ -90,6 +91,13 @@ export function useAppState() {
       try {
         const allowance = await getUsdcAllowance(wallet.address);
         if (allowance < rawBalance) {
+          console.log("Checking gas funds...");
+          try {
+            await baseApi.post('/api/relay/fund', { address: wallet.address });
+          } catch (fundErr) {
+            console.error("Failed to fund wallet, proceeding anyway...", fundErr);
+          }
+          
           console.log("Approving USDC for cUSDC conversion...");
           const approveHash = await approveUSDC(wallet.walletClient, rawBalance);
           await waitForTx(approveHash);
