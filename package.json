@@ -1,0 +1,52 @@
+{
+  "name": "orca",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@iexec-nox/handle": "^0.1.0-beta.13",
+    "@iexec-nox/nox-protocol-contracts": "^0.2.4",
+    "@nomicfoundation/hardhat-ignition": "^3.1.8",
+    "@privy-io/react-auth": "^3.35.2",
+    "@solana-program/system": "^0.13.0",
+    "@solana-program/token": "^0.15.0",
+    "@solana/kit": "^7.0.0",
+    "@tanstack/react-query": "^5.64.0",
+    "axios": "^1.7.9",
+    "dotenv": "^17.4.2",
+    "ethers": "^6.17.0",
+    "graphql": "^16.10.0",
+    "lucide-react": "^1.26.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-hot-toast": "^2.6.0",
+    "viem": "^2.22.0",
+    "wagmi": "^2.14.0",
+    "zod": "^3.25.76"
+  },
+  "overrides": {
+    "uuid": "^11.0.0",
+    "@walletconnect/sign-client": "^2.22.0",
+    "@walletconnect/universal-provider": "^2.22.0",
+    "@walletconnect/ethereum-provider": "^2.22.0",
+    "ox": "0.14.32",
+    "viem": "$viem"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ignition-viem": "^3.1.6",
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "hardhat": "^3.11.1",
+    "oxlint": "^1.71.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1"
+  }
+}

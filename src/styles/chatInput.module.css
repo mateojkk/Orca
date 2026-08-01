@@ -1,0 +1,137 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 8px 8px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.composer:focus-within {
+  border-color: var(--border-hl);
+}
+
+.inputWrap {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--text-bright);
+  resize: none;
+  line-height: 1.5;
+  min-height: 22px;
+  max-height: 120px;
+  overflow-y: auto;
+  caret-color: var(--accent);
+}
+
+.textarea::placeholder {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.passwordInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--text-bright);
+  caret-color: var(--accent);
+  letter-spacing: 0.15em;
+}
+
+.sendButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #00ffcc;
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform: scale(1.05);
+}
+
+.sendButton:disabled {
+  background: var(--bg-raised);
+  color: var(--text-dim);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.suggestions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.suggestion {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(0,220,180,0.2);
+  border-radius: 6px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.suggestion:hover {
+  background: rgba(0,220,180,0.2);
+  border-color: rgba(0,220,180,0.4);
+}
+
+.quickActions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 2px 4px;
+}
+
+.quickAction {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.quickAction:hover {
+  color: var(--text-bright);
+  border-color: var(--border-hover);
+}

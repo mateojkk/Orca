@@ -1,0 +1,30 @@
+/* =============================
+   TERMINAL BODY (scrollable)
+   ============================= */
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.75rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hl) transparent;
+  width: 100%;
+}
+
+.chat-body::-webkit-scrollbar {
+  width: 4px;
+}
+.chat-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-body::-webkit-scrollbar-thumb {
+  background: var(--border-hl);
+  border-radius: 2px;
+}
+
+@media (max-width: 600px) {
+  .chat-body {
+    padding: 0.5rem 0;
+  }
+}
