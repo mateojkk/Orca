@@ -40,7 +40,6 @@ contract ConfidentialToken {
         relayer = msg.sender;
         usdcToken = _usdcToken;
         _totalSupply = Nox.toEuint256(0);
-        Nox.allowThis(_totalSupply);
     }
 
     function setRelayer(address newRelayer) external {
@@ -123,7 +122,6 @@ contract ConfidentialToken {
 
         _ensureBalance(from);
         _cheques[chequeId] = Nox.toEuint256(0);
-        Nox.allowThis(_cheques[chequeId]);
 
         INoxCompute(NOX_COMPUTE).validateInputProof(handle, from, proof, TEEType.Uint256);
         euint256 amount = euint256.wrap(handle);
@@ -172,7 +170,6 @@ contract ConfidentialToken {
     function _mintInternal(address user, uint256 rawAmount) private {
         _ensureBalance(user);
         euint256 amount = Nox.toEuint256(rawAmount);
-        Nox.allowThis(amount);
         (, _balances[user], _totalSupply) = Nox.mint(_balances[user], amount, _totalSupply);
         Nox.allowThis(_balances[user]);
         Nox.addViewer(_balances[user], user);
@@ -208,8 +205,6 @@ contract ConfidentialToken {
     function _ensureBalance(address user) private {
         if (euint256.unwrap(_balances[user]) == bytes32(0)) {
             _balances[user] = Nox.toEuint256(0);
-            Nox.allowThis(_balances[user]);
-            Nox.addViewer(_balances[user], user);
         }
     }
 
